@@ -1,0 +1,19 @@
+{
+  "name": "magic-font",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "flubber": "^0.4.2",
+    "opentype.js": "^1.3.4"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.3.0",
+    "vite": "^8.1.2"
+  }
+}

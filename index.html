@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Magic Font — stories that drift between languages</title>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="masthead">
+          <div>
+            <p id="genre" class="genre"></p>
+            <h1 id="title"></h1>
+          </div>
+          <button id="library-toggle" aria-expanded="false" aria-controls="library">
+            stories <span class="chev">⌄</span>
+          </button>
+        </div>
+        <nav id="library" class="library"></nav>
+        <p class="hint">Hover a word to see it in the other language. Click to pin it.</p>
+        <div class="controls-row">
+          <button id="ambient-toggle" class="ambient-toggle" type="button" aria-pressed="false">ambient</button>
+          <button id="lang-toggle" class="lang-toggle" type="button" aria-pressed="false">EN</button>
+        </div>
+      </header>
+      <main id="story" class="story">
+        <p class="loading">Loading font…</p>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
