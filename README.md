@@ -59,7 +59,8 @@ dictionary-assisted editor for new stories.
 
 * Type (or **import from a `.txt` file**) English text: a blank line starts a
   new paragraph, a line containing only `---` starts a new page. A story with
-  several pages becomes a **book**, read with a page turner below the text.
+  several pages becomes a **book**, read with a fixed page turner at the
+  bottom of the screen or the left/right arrow keys.
 * **draft french** fills the right-hand side word by word from an EN->FR
   lexicon, keeping paragraphs and pages aligned. Word-level dictionaries know
   nothing about sense or idiom, so it is a first draft to correct, not a

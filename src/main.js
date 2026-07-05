@@ -261,7 +261,7 @@ async function main() {
   const toggle = document.getElementById('library-toggle');
   const items = [];
 
-  const addItem = (s, i) => {
+  const addItem = (s, i, parent) => {
     const btn = document.createElement('button');
     btn.className = 'story-item';
     btn.innerHTML =
@@ -269,20 +269,37 @@ async function main() {
       `<span class="titles">${s.title.en} <span class="dot">·</span> ${s.title.fr}</span>` +
       `<span class="tag">${s.genre.en}</span>`;
     btn.addEventListener('click', () => selectStory(i));
-    library.appendChild(btn);
+    parent.appendChild(btn);
     items.push(btn);
   };
 
   const builtinCount = allStories.length - userStories.length;
-  allStories.slice(0, builtinCount).forEach((s, i) => addItem(s, i));
+  allStories.slice(0, builtinCount).forEach((s, i) => addItem(s, i, library));
 
-  // User-written stories and books get their own shelf below the built-ins.
+  // User-written stories and books get their own shelf below the built-ins,
+  // collapsed by default behind a "your stories" toggle.
+  let userShelf = library;
   if (userStories.length) {
-    const divider = document.createElement('div');
+    const divider = document.createElement('button');
+    divider.type = 'button';
     divider.className = 'library-divider';
-    divider.textContent = 'your stories';
+    divider.setAttribute('aria-expanded', 'false');
+    divider.innerHTML = 'your stories <span class="chev">⌄</span>';
     library.appendChild(divider);
-    userStories.forEach((s, j) => addItem(s, builtinCount + j));
+
+    userShelf = document.createElement('div');
+    userShelf.className = 'user-shelf';
+    library.appendChild(userShelf);
+    userStories.forEach((s, j) => addItem(s, builtinCount + j, userShelf));
+
+    const setShelf = (open) => {
+      userShelf.classList.toggle('open', open);
+      divider.classList.toggle('open', open);
+      divider.setAttribute('aria-expanded', String(open));
+    };
+    divider.addEventListener('click', () => setShelf(!userShelf.classList.contains('open')));
+    // Start expanded only when the current story lives on this shelf.
+    if (current >= builtinCount) setShelf(true);
   }
 
   // The editor only exists on the dev server (it writes files through a Vite
@@ -299,7 +316,7 @@ async function main() {
       closeLibrary();
       openEditor();
     });
-    library.appendChild(add);
+    userShelf.appendChild(add);
   }
 
   const markCurrent = () => items.forEach((b, i) => b.classList.toggle('current', i === current));
@@ -349,6 +366,13 @@ async function main() {
   };
   document.getElementById('page-prev').addEventListener('click', () => turnPage(-1));
   document.getElementById('page-next').addEventListener('click', () => turnPage(1));
+  document.addEventListener('keydown', (e) => {
+    // Leave typing (editor fields) and modified shortcuts alone.
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.target instanceof Element && e.target.closest('input, textarea, .editor-overlay')) return;
+    if (e.key === 'ArrowLeft') turnPage(-1);
+    else if (e.key === 'ArrowRight') turnPage(1);
+  });
 
   // --- ambient drift (off by default; toggled by the "ambient" button) ---
   const ambientToggle = document.getElementById('ambient-toggle');

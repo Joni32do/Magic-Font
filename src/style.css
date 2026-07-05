@@ -98,11 +98,46 @@ header h1 {
 .library-divider {
   margin-top: 10px;
   padding: 7px 4px 3px;
+  border: none;
+  background: none;
+  font-family: inherit;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  text-align: left;
   color: var(--muted);
   border-bottom: 1px solid rgba(138, 127, 109, 0.18);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.library-divider:hover {
+  color: var(--ink);
+}
+
+.library-divider .chev {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.library-divider.open .chev {
+  transform: rotate(180deg);
+}
+
+.user-shelf {
+  display: flex;
+  flex-direction: column;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height 0.35s ease,
+    opacity 0.35s ease;
+}
+
+.user-shelf.open {
+  max-height: 400px;
+  opacity: 1;
 }
 
 .add-story {
@@ -232,12 +267,20 @@ svg.word {
 
 /* --- book pager --- */
 
+/* Fixed to the viewport bottom so it sits in the same spot on every page,
+   however long the text; the shadow feathers passing text into the paper. */
 .pager {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 18px;
-  margin-top: 24px;
+  padding: 4px 16px;
+  background: var(--paper);
+  box-shadow: 0 0 14px 10px var(--paper);
   color: var(--muted);
   font-size: 13px;
   letter-spacing: 0.1em;
@@ -261,6 +304,11 @@ svg.word {
 .pager button:disabled {
   opacity: 0.3;
   cursor: default;
+}
+
+/* display: flex above would defeat the hidden attribute otherwise */
+.pager[hidden] {
+  display: none;
 }
 
 /* --- story editor (dev only) --- */
