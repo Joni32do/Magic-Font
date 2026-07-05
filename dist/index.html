@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Magic Font — stories that drift between languages</title>
-    <script type="module" crossorigin src="/assets/index-DOBFzn1s.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-BGDw_UZc.css">
+    <script type="module" crossorigin src="/assets/index-D32QlGjt.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-OMFVtB8q.css">
   </head>
   <body>
     <div id="app">
@@ -20,23 +20,20 @@
           </button>
         </div>
         <nav id="library" class="library"></nav>
-        <p class="hint">
-          Hover a word to see it in the other language. Click to pin it.
-          Drag the slider to blend the whole story.
-        </p>
-        <div class="controls">
-          <span class="lang-label">English</span>
-          <input id="global-t" type="range" min="0" max="1000" value="0" />
-          <span class="lang-label">Français</span>
-          <label class="ambient">
-            <input id="ambient" type="checkbox" />
-            ambient drift
-          </label>
+        <p class="hint">Hover a word to see it in the other language. Click to pin it.</p>
+        <div class="controls-row">
+          <button id="ambient-toggle" class="ambient-toggle" type="button" aria-pressed="false">ambient</button>
+          <button id="lang-toggle" class="lang-toggle" type="button" aria-pressed="false">EN</button>
         </div>
       </header>
       <main id="story" class="story">
         <p class="loading">Loading font…</p>
       </main>
+      <nav id="pager" class="pager" hidden>
+        <button id="page-prev" type="button" aria-label="previous page">&larr;</button>
+        <span id="page-label"></span>
+        <button id="page-next" type="button" aria-label="next page">&rarr;</button>
+      </nav>
     </div>
   </body>
 </html>

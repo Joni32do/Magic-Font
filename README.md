@@ -52,16 +52,41 @@ languages, make the whole phrase one morphing unit
 (e.g. `{ en: 'wise owl', fr: 'chouette sage' }`). A `{ br: true }` token forces
 a line break, and `verse: true` tightens line spacing - see *Autumn Song*.
 
+## Writing stories in the app (dev mode)
+
+On the dev server the expanded *stories* panel ends with a small **+**: a
+dictionary-assisted editor for new stories.
+
+* Type (or **import from a `.txt` file**) English text: a blank line starts a
+  new paragraph, a line containing only `---` starts a new page. A story with
+  several pages becomes a **book**, read with a page turner below the text.
+* **draft french** fills the right-hand side word by word from an EN->FR
+  lexicon, keeping paragraphs and pages aligned. Word-level dictionaries know
+  nothing about sense or idiom, so it is a first draft to correct, not a
+  translation - fix wording and word order before saving (make phrases one
+  token per line pair if order differs).
+* **save story** writes the story as JSON to `src/stories/user/` - user
+  stories live in that subdirectory (one file each, `pages` instead of
+  `paragraphs`) and appear under *your stories* in the panel. They are picked
+  up by `import.meta.glob`, so builds ship whatever files exist; the editor
+  itself never ships (dev-only chunk + Vite middleware).
+
+The built-in starter lexicon is small. For real coverage run
+
+```bash
+npm run dict   # downloads Apertium fra-eng and builds tools/dict/en-fr.json
+```
+
+The Apertium dictionary is GPL-3.0, so the converted file stays local
+(gitignored) instead of being committed to this MIT repository.
+
 ## Roadmap
 
-Ideas to make authoring new stories faster, not yet implemented:
+Ideas to make authoring new stories faster:
 
-* **Dictionary-assisted translation** - plug a bilingual lexicon (e.g. Apertium's
-  en-fr dictionary, Wiktionary extracts) into an authoring script that suggests
-  a first-draft FR translation for typed EN text. Word-level dictionaries lack
-  sense disambiguation and idiom handling, so treat output as a draft for human
-  review, not a runtime translator - `stories.js` phrasing (word order, meter)
-  still needs a human pass.
+* ~~**Dictionary-assisted translation**~~ - done, see *Writing stories in the
+  app*: the Apertium en-fr lexicon drafts FR for typed or imported EN text,
+  as a draft for human review, not a runtime translator.
 * **Synonym morph within one language** - generalize `WordMorph` from two fixed
   endpoints (`en`, `fr`) to an ordered chain of near-synonyms, e.g.
   `cold -> chilly -> brisk -> freezing -> arctic -> icy`. The existing
