@@ -1,1 +1,3 @@
 node_modules/
+tools/dict/en-fr.json
+tools/dict/apertium-fra-eng.dix

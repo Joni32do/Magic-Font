@@ -242,3 +242,21 @@ export const stories = [
     ],
   },
 ];
+
+// User-written stories live as JSON files in src/stories/user/ - one story
+// per file, written there by the dev-server editor (the "+" in the library)
+// or dropped in by hand. Same token format as above, except the text lives
+// under `pages` (an array of paragraph lists): one page = a story, several
+// pages = a book the reader can leaf through.
+const userModules = import.meta.glob('./stories/user/*.json', { eager: true });
+
+export const userStories = Object.keys(userModules)
+  .sort()
+  .map((path) => userModules[path].default);
+
+export const allStories = [...stories, ...userStories];
+
+// Built-in stories keep a flat `paragraphs` list; books have `pages`.
+export function pagesOf(story) {
+  return story.pages || [story.paragraphs];
+}

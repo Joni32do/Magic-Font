@@ -1,6 +1,6 @@
 import { parse } from 'opentype.js';
 import { WordMorph, ChainMorph, smootherstep, FONT_UNITS } from './morph.js';
-import { stories } from './stories.js';
+import { allStories, userStories, pagesOf } from './stories.js';
 import './style.css';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -186,24 +186,17 @@ function prewarm() {
   setTimeout(build, 200);
 }
 
-function buildStory(font, metrics, story) {
-  words.length = 0;
+// Words before this index in `words` belong to the genre/title header and
+// survive page turns; buildPage only swaps out everything after it.
+let headerWordCount = 0;
 
-  const genreEl = document.getElementById('genre');
-  genreEl.textContent = '';
-  const genreWord = makeWord(font, metrics, story.genre, GENRE_PX, [MUTED_INK, MUTED_BLEU]);
-  words.push(genreWord);
-  genreEl.appendChild(genreWord.svg);
+function buildPage(font, metrics, story, pageIdx) {
+  words.length = headerWordCount;
 
-  const titleEl = document.getElementById('title');
-  titleEl.textContent = '';
-  const titleWord = makeWord(font, metrics, story.title, TITLE_PX);
-  words.push(titleWord);
-  titleEl.appendChild(titleWord.svg);
-
+  const pages = pagesOf(story);
   const storyEl = document.getElementById('story');
   storyEl.textContent = '';
-  for (const paragraph of story.paragraphs) {
+  for (const paragraph of pages[pageIdx]) {
     const p = document.createElement('p');
     if (story.verse) p.classList.add('verse');
     for (const token of paragraph) {
@@ -219,8 +212,35 @@ function buildStory(font, metrics, story) {
     storyEl.appendChild(p);
   }
 
+  const pager = document.getElementById('pager');
+  pager.hidden = pages.length < 2;
+  if (!pager.hidden) {
+    document.getElementById('page-label').textContent = `page ${pageIdx + 1} / ${pages.length}`;
+    document.getElementById('page-prev').disabled = pageIdx === 0;
+    document.getElementById('page-next').disabled = pageIdx === pages.length - 1;
+  }
+
   wake();
   prewarm();
+}
+
+function buildStory(font, metrics, story, pageIdx = 0) {
+  words.length = 0;
+
+  const genreEl = document.getElementById('genre');
+  genreEl.textContent = '';
+  const genreWord = makeWord(font, metrics, story.genre, GENRE_PX, [MUTED_INK, MUTED_BLEU]);
+  words.push(genreWord);
+  genreEl.appendChild(genreWord.svg);
+
+  const titleEl = document.getElementById('title');
+  titleEl.textContent = '';
+  const titleWord = makeWord(font, metrics, story.title, TITLE_PX);
+  words.push(titleWord);
+  titleEl.appendChild(titleWord.svg);
+
+  headerWordCount = words.length;
+  buildPage(font, metrics, story, pageIdx);
 }
 
 async function main() {
@@ -233,22 +253,71 @@ async function main() {
   };
 
   const params = new URLSearchParams(location.search);
-  let current = Math.max(0, stories.findIndex((s) => s.id === params.get('story')));
+  let current = Math.max(0, allStories.findIndex((s) => s.id === params.get('story')));
+  let currentPage = 0;
 
   // --- library panel ---
   const library = document.getElementById('library');
   const toggle = document.getElementById('library-toggle');
-  const items = stories.map((s, i) => {
+  const items = [];
+
+  const addItem = (s, i, parent) => {
     const btn = document.createElement('button');
     btn.className = 'story-item';
     btn.innerHTML =
-      `<span class="num">${ROMAN[i]}</span>` +
+      `<span class="num">${ROMAN[i] || i + 1}</span>` +
       `<span class="titles">${s.title.en} <span class="dot">·</span> ${s.title.fr}</span>` +
       `<span class="tag">${s.genre.en}</span>`;
     btn.addEventListener('click', () => selectStory(i));
-    library.appendChild(btn);
-    return btn;
-  });
+    parent.appendChild(btn);
+    items.push(btn);
+  };
+
+  const builtinCount = allStories.length - userStories.length;
+  allStories.slice(0, builtinCount).forEach((s, i) => addItem(s, i, library));
+
+  // User-written stories and books get their own shelf below the built-ins,
+  // collapsed by default behind a "your stories" toggle.
+  let userShelf = library;
+  if (userStories.length) {
+    const divider = document.createElement('button');
+    divider.type = 'button';
+    divider.className = 'library-divider';
+    divider.setAttribute('aria-expanded', 'false');
+    divider.innerHTML = 'your stories <span class="chev">⌄</span>';
+    library.appendChild(divider);
+
+    userShelf = document.createElement('div');
+    userShelf.className = 'user-shelf';
+    library.appendChild(userShelf);
+    userStories.forEach((s, j) => addItem(s, builtinCount + j, userShelf));
+
+    const setShelf = (open) => {
+      userShelf.classList.toggle('open', open);
+      divider.classList.toggle('open', open);
+      divider.setAttribute('aria-expanded', String(open));
+    };
+    divider.addEventListener('click', () => setShelf(!userShelf.classList.contains('open')));
+    // Start expanded only when the current story lives on this shelf.
+    if (current >= builtinCount) setShelf(true);
+  }
+
+  // The editor only exists on the dev server (it writes files through a Vite
+  // middleware), so the "+" is dev-only and the chunk never ships in builds.
+  if (import.meta.env.DEV) {
+    const add = document.createElement('button');
+    add.type = 'button';
+    add.className = 'add-story';
+    add.textContent = '+';
+    add.title = 'write a new story';
+    add.setAttribute('aria-label', 'write a new story');
+    add.addEventListener('click', async () => {
+      const { openEditor } = await import('./editor.js');
+      closeLibrary();
+      openEditor();
+    });
+    userShelf.appendChild(add);
+  }
 
   const markCurrent = () => items.forEach((b, i) => b.classList.toggle('current', i === current));
 
@@ -270,16 +339,40 @@ async function main() {
     closeLibrary();
     if (i === current) return;
     current = i;
+    currentPage = 0;
     markCurrent();
     const url = new URL(location);
-    url.searchParams.set('story', stories[i].id);
+    url.searchParams.set('story', allStories[i].id);
     history.replaceState(null, '', url);
     fadeTargets.forEach((el) => el.classList.add('fading'));
     setTimeout(() => {
-      buildStory(font, metrics, stories[i]);
+      buildStory(font, metrics, allStories[i]);
       fadeTargets.forEach((el) => el.classList.remove('fading'));
     }, FADE_MS);
   }
+
+  // --- page turning (books: user stories with more than one page) ---
+  const storyEl = document.getElementById('story');
+  const turnPage = (delta) => {
+    const pages = pagesOf(allStories[current]);
+    const next = currentPage + delta;
+    if (next < 0 || next >= pages.length) return;
+    currentPage = next;
+    storyEl.classList.add('fading');
+    setTimeout(() => {
+      buildPage(font, metrics, allStories[current], currentPage);
+      storyEl.classList.remove('fading');
+    }, FADE_MS);
+  };
+  document.getElementById('page-prev').addEventListener('click', () => turnPage(-1));
+  document.getElementById('page-next').addEventListener('click', () => turnPage(1));
+  document.addEventListener('keydown', (e) => {
+    // Leave typing (editor fields) and modified shortcuts alone.
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.target instanceof Element && e.target.closest('input, textarea, .editor-overlay')) return;
+    if (e.key === 'ArrowLeft') turnPage(-1);
+    else if (e.key === 'ArrowRight') turnPage(1);
+  });
 
   // --- ambient drift (off by default; toggled by the "ambient" button) ---
   const ambientToggle = document.getElementById('ambient-toggle');
@@ -314,7 +407,7 @@ async function main() {
   });
 
   markCurrent();
-  buildStory(font, metrics, stories[current]);
+  buildStory(font, metrics, allStories[current]);
 }
 
 main().catch((err) => {

@@ -1,0 +1,97 @@
+{
+  "id": "paper-boat",
+  "genre": { "en": "a book", "fr": "un livre" },
+  "title": { "en": "The Paper Boat", "fr": "Le bateau de papier" },
+  "pages": [
+    [
+      [
+        { "en": "Lena", "fr": "Léna" },
+        { "en": "folded", "fr": "plia" },
+        { "en": "a", "fr": "un" },
+        { "en": "boat", "fr": "bateau" },
+        { "en": "from", "fr": "avec" },
+        { "en": "a page", "fr": "une page" },
+        { "en": "of her", "fr": "de son" },
+        { "en": "old", "fr": "vieux" },
+        { "en": "notebook.", "fr": "cahier." },
+        { "en": "On the paper", "fr": "Sur le papier" },
+        { "en": "lived", "fr": "vivait" },
+        { "en": "half", "fr": "la moitié" },
+        { "en": "a story,", "fr": "d'une histoire," },
+        { "en": "written", "fr": "écrite" },
+        { "en": "in", "fr": "à" },
+        { "en": "blue ink.", "fr": "l'encre bleue." }
+      ],
+      [
+        { "en": "She", "fr": "Elle" },
+        { "en": "set", "fr": "posa" },
+        { "en": "the boat", "fr": "le bateau" },
+        { "en": "on", "fr": "sur" },
+        { "en": "the stream", "fr": "le ruisseau" },
+        { "en": "behind", "fr": "derrière" },
+        { "en": "the house", "fr": "la maison" },
+        { "en": "and", "fr": "et" },
+        { "en": "watched it", "fr": "le regarda" },
+        { "en": "drift away.", "fr": "s'éloigner." }
+      ]
+    ],
+    [
+      [
+        { "en": "The boat", "fr": "Le bateau" },
+        { "en": "sailed", "fr": "navigua" },
+        { "en": "all", "fr": "toute" },
+        { "en": "night.", "fr": "la nuit." },
+        { "en": "Fish", "fr": "Les poissons" },
+        { "en": "read", "fr": "lisaient" },
+        { "en": "the words", "fr": "les mots" },
+        { "en": "through", "fr": "à travers" },
+        { "en": "the wet", "fr": "le" },
+        { "en": "paper", "fr": "papier mouillé" },
+        { "en": "and", "fr": "et" },
+        { "en": "argued", "fr": "se disputaient" },
+        { "en": "about", "fr": "sur" },
+        { "en": "the ending.", "fr": "la fin." }
+      ],
+      [
+        { "en": "A heron", "fr": "Un héron" },
+        { "en": "carried it", "fr": "le porta" },
+        { "en": "over", "fr": "au-dessus" },
+        { "en": "the mill,", "fr": "du moulin," },
+        { "en": "because", "fr": "car" },
+        { "en": "some", "fr": "certaines" },
+        { "en": "stories", "fr": "histoires" },
+        { "en": "must not", "fr": "ne doivent pas" },
+        { "en": "end", "fr": "finir" },
+        { "en": "too soon.", "fr": "trop tôt." }
+      ]
+    ],
+    [
+      [
+        { "en": "In the morning,", "fr": "Au matin," },
+        { "en": "a boy", "fr": "un garçon" },
+        { "en": "found", "fr": "trouva" },
+        { "en": "the boat", "fr": "le bateau" },
+        { "en": "in the reeds.", "fr": "dans les roseaux." },
+        { "en": "He", "fr": "Il" },
+        { "en": "dried", "fr": "sécha" },
+        { "en": "the page,", "fr": "la page," },
+        { "en": "read", "fr": "lut" },
+        { "en": "the story,", "fr": "l'histoire," },
+        { "en": "and", "fr": "et" },
+        { "en": "wrote", "fr": "écrivit" },
+        { "en": "the ending", "fr": "la fin" },
+        { "en": "himself.", "fr": "lui-même." }
+      ],
+      [
+        { "en": "Then", "fr": "Puis" },
+        { "en": "he", "fr": "il" },
+        { "en": "folded", "fr": "plia" },
+        { "en": "the page", "fr": "la page" },
+        { "en": "again", "fr": "encore" },
+        { "en": "and", "fr": "et" },
+        { "en": "gave it back", "fr": "la rendit" },
+        { "en": "to the water.", "fr": "à l'eau." }
+      ]
+    ]
+  ]
+}

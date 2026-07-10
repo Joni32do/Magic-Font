@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Magic Font — stories that drift between languages</title>
+    <title>Magic Font - stories that drift between languages</title>
   </head>
   <body>
     <div id="app">
@@ -27,6 +27,11 @@
       <main id="story" class="story">
         <p class="loading">Loading font…</p>
       </main>
+      <nav id="pager" class="pager" hidden>
+        <button id="page-prev" type="button" aria-label="previous page">&larr;</button>
+        <span id="page-label"></span>
+        <button id="page-next" type="button" aria-label="next page">&rarr;</button>
+      </nav>
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>
