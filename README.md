@@ -2,7 +2,7 @@
 
 Interactive language learning through reading: bilingual stories whose words are
 not fixed glyphs but living vector shapes that **morph smoothly between English
-and French** - the same idea as manim's shape transformations in 3blue1brown
+and French** - the same idea as Manim's shape transformations in 3blue1brown
 videos, but live in the browser.
 
 <img src="./docs/images/website_screenshot.png" height="300" alt="Screenshot of the Website"> <img src="./docs/images/website_animation.gif" height="300" alt="Animation of the Website">
@@ -111,4 +111,4 @@ Ideas to make authoring new stories faster:
 
 ### Contribution
 
-* Thanks to Claude it was easy to bring this idea of mine into live
+Thanks to Claude, it was easy to bring this idea of mine to life. Feel free to add PRs.
