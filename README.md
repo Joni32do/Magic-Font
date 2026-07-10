@@ -7,7 +7,6 @@ videos, but live in the browser.
 
 <img src="./docs/images/website_screenshot.png" height="300" alt="Screenshot of the Website"> <img src="./docs/images/website_animation.gif" height="300" alt="Animation of the Website">
 
-
 ## Run it
 
 ```bash
@@ -104,7 +103,7 @@ Ideas to make authoring new stories faster:
   at runtime (`opentype.js` + `flubber` only, no backend); the LLM would write
   suggested `stories.js` entries for a human to accept/edit, not run in the
   browser.
-
+* Make it a browser plug-in
 
 ### Known Issues
 
